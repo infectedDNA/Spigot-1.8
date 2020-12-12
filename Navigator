@@ -1,0 +1,86 @@
+package de.infecteddna.lobby.items;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import de.infecteddna.main.Main;
+
+public class Navigator implements Listener {
+	
+	
+	@EventHandler
+	public void onInteract(PlayerInteractEvent e) {
+		Player p = e.getPlayer();
+		try {
+			if (e.getItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8× §9Navigator §8┃ §7Rechtsklick §8×")) {
+				if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+					Inventory inv = Bukkit.createInventory(null, InventoryType.CHEST, "§8× §9Navigator §8┃ §7Rechtsklick §8×");
+					
+					ItemStack Spawn = new ItemStack(Material.AIR);
+					ItemMeta SpawnMeta = Spawn.getItemMeta();
+					SpawnMeta.setDisplayName("§8× §aSpawn §8×");
+					Spawn.setItemMeta(SpawnMeta);
+
+					ItemStack Bedwars = new ItemStack(Material.BED);
+					ItemMeta BedwarsMeta = Bedwars.getItemMeta();
+					BedwarsMeta.setDisplayName("§8× §9Bedwars §8×");
+					Bedwars.setItemMeta(BedwarsMeta);
+
+					ItemStack Build = new ItemStack(Material.COMPASS);
+					ItemMeta BuildMeta = Build.getItemMeta();
+					BuildMeta.setDisplayName("§8× §cBuildFFA §8×");
+					Build.setItemMeta(BuildMeta);
+
+					inv.setItem(13, Spawn);
+					inv.setItem(11, Bedwars);
+					inv.setItem(15, Build);
+					p.openInventory(inv);
+					
+				}
+			}
+		} catch (Exception e1) {
+
+		}
+	}
+	
+	
+	
+	@EventHandler
+	public void onClick(InventoryClickEvent e) {
+		Player p = (Player) e.getWhoClicked();
+		try {
+			if (e.getInventory().getName().equalsIgnoreCase("§8× §9Navigator §8┃ §7Rechtsklick §8×")) {
+				e.setCancelled(true);
+				try {
+					if(e.getCurrentItem().getType() == Material.BED) {
+						if(e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§8× §9Bedwars §8×")) {
+							p.sendMessage(Main.Prefix + "Du hast du zu §bBedwars §7Teleportiert§8.");
+							Location loc = new Location(Bukkit.getWorld(Main.world), -50.500, 66, -29.500);
+							loc.setYaw((float)180);
+							loc.setPitch((float)0);
+							p.teleport(loc);
+							p.closeInventory();
+						}
+					}
+				} catch (NullPointerException e2) {
+					
+				}
+			}
+		} catch (NullPointerException e1) {
+			
+		}
+		
+		
+	}
+}
